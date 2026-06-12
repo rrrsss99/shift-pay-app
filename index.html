@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日払い給料計算アプリ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="loginView" class="login-view">
+    <div class="login-card">
+      <h1>日払い給料計算</h1>
+      <p>仮確認用ログイン</p>
+      <label>
+        パスワード
+        <input id="passwordInput" type="password" autocomplete="current-password" placeholder="パスワードを入力" />
+      </label>
+      <div id="loginError" class="error-text"></div>
+      <button id="loginBtn" type="button" class="full">ログイン</button>
+    </div>
+  </section>
+
+  <div id="appShell" class="app-shell hidden">
+    <header class="app-header">
+      <div>
+        <h1>日払い給料計算</h1>
+        <p>ローカル確認版</p>
+      </div>
+      <button id="logoutBtn" type="button" class="logout-btn">ログアウト</button>
+    </header>
+
+    <main>
+      <section id="view-calc" class="view active">
+        <div class="grid two-col">
+          <section class="card">
+            <h2>給料計算</h2>
+
+            <div class="form-grid">
+              <label>
+                日付
+                <input id="workDate" type="date" />
+              </label>
+
+              <label>
+                名前
+                <select id="staffSelect"></select>
+              </label>
+            </div>
+
+            <div class="section-box">
+              <h3>昼勤務</h3>
+              <div class="form-grid">
+                <label>
+                  昼出勤
+                  <input id="dayStart" type="text" list="dayStartOptions" placeholder="空欄" inputmode="numeric" />
+                </label>
+                <label>
+                  昼退勤
+                  <input id="dayEnd" type="text" list="dayEndOptions" placeholder="空欄" inputmode="numeric" />
+                </label>
+              </div>
+            </div>
+
+            <div class="section-box">
+              <h3>夜勤務</h3>
+              <div class="form-grid">
+                <label>
+                  夜出勤
+                  <input id="nightStart" type="text" list="nightStartOptions" placeholder="空欄" inputmode="numeric" />
+                </label>
+                <label>
+                  夜退勤
+                  <input id="nightEnd" type="text" list="nightEndOptions" placeholder="空欄" inputmode="numeric" />
+                </label>
+                <label>
+                  夜休憩
+                  <select id="nightBreak"></select>
+                </label>
+              </div>
+            </div>
+
+            <label class="checkbox-row">
+              <input id="bonusApplied" type="checkbox" />
+              売上達成ボーナスを付ける
+            </label>
+
+            <div class="button-row">
+              <button id="copyPreviousBtn" type="button" class="secondary">前回勤務コピー</button>
+              <button id="calculateBtn" type="button">計算する</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>計算結果</h2>
+            <div id="calcResult" class="result-box muted">勤務時間を入力して「計算する」を押してください。</div>
+            <button id="saveWorkBtn" type="button" class="full" disabled>保存</button>
+          </section>
+        </div>
+
+        <section class="card">
+          <h2>本日の支払い一覧</h2>
+          <div id="todayList"></div>
+        </section>
+      </section>
+
+      <section id="view-staff" class="view">
+        <div class="grid two-col">
+          <section class="card">
+            <h2>バイト追加・編集</h2>
+            <input id="editingStaffId" type="hidden" />
+            <div class="form-grid">
+              <label>
+                名前
+                <input id="staffName" type="text" placeholder="例：Aさん" />
+              </label>
+              <label>
+                時給
+                <input id="hourlyWage" type="number" inputmode="numeric" placeholder="例：1200" />
+              </label>
+              <label>
+                交通費
+                <input id="transportationFee" type="number" inputmode="numeric" placeholder="例：500" />
+              </label>
+              <label>
+                入店年月（任意）
+                <input id="hireMonth" type="month" />
+              </label>
+            </div>
+            <label class="checkbox-row">
+              <input id="isEmployed" type="checkbox" checked />
+              在籍中
+            </label>
+            <div class="button-row">
+              <button id="saveStaffBtn" type="button">保存</button>
+              <button id="clearStaffBtn" type="button" class="secondary">クリア</button>
+            </div>
+
+            <div class="section-box">
+              <h3>店舗設定</h3>
+              <label>
+                売上達成ボーナス金額
+                <input id="bonusAmount" type="number" inputmode="numeric" placeholder="例：1000" />
+              </label>
+              <button id="saveSettingsBtn" type="button" class="full">設定を保存</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>バイト一覧</h2>
+            <div id="staffList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="view-summary" class="view">
+        <section class="card">
+          <h2>集計・履歴</h2>
+          <div class="form-grid">
+            <label>
+              表示月
+              <input id="summaryMonth" type="month" />
+            </label>
+            <label>
+              日別表示
+              <input id="summaryDate" type="date" />
+            </label>
+          </div>
+        </section>
+
+        <div class="grid two-col">
+          <section class="card">
+            <h2>月別集計</h2>
+            <div id="monthlySummary"></div>
+          </section>
+          <section class="card">
+            <h2>バイト別集計</h2>
+            <div id="staffSummary"></div>
+          </section>
+        </div>
+
+        <section class="card">
+          <h2>日別履歴</h2>
+          <div id="dailyHistory"></div>
+        </section>
+      </section>
+
+      <datalist id="dayStartOptions"></datalist>
+      <datalist id="dayEndOptions"></datalist>
+      <datalist id="nightStartOptions"></datalist>
+      <datalist id="nightEndOptions"></datalist>
+    </main>
+
+    <nav class="bottom-tabs">
+      <button class="tab active" data-view="calc">計算</button>
+      <button class="tab" data-view="staff">管理</button>
+      <button class="tab" data-view="summary">集計</button>
+    </nav>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
