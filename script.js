@@ -591,6 +591,16 @@ function saveStaff() {
 function saveSettings() {
   const bonusAmount = Number($('bonusAmount').value || 0);
   if (bonusAmount < 0) return alert('ボーナス金額は0円以上で入力してください。');
+
+  const currentAmount = Number(settings.bonusAmount || 0);
+  if (bonusAmount !== currentAmount) {
+    const ok = confirm(`売上達成ボーナス金額を変更しますか？\n\n現在：${yen(currentAmount)}\n変更後：${yen(bonusAmount)}`);
+    if (!ok) {
+      $('bonusAmount').value = currentAmount;
+      return;
+    }
+  }
+
   settings = { bonusAmount, updatedAt: new Date().toISOString() };
   save(STORAGE_KEYS.settings, settings);
   alert('店舗設定を保存しました。');
@@ -681,6 +691,31 @@ function deleteWork(workId) {
   workList = workList.filter((w) => w.workId !== workId);
   save(STORAGE_KEYS.works, workList);
   renderAll();
+}
+
+function resetDayWork() {
+  $('dayStart').value = '';
+  $('dayEnd').value = '';
+  updateTimeDatalists();
+}
+
+function resetNightWork() {
+  $('nightStart').value = '';
+  $('nightEnd').value = '';
+  $('nightBreak').value = '0';
+  updateTimeDatalists();
+}
+
+function resetCalcForm() {
+  $('staffSelect').value = '';
+  resetDayWork();
+  resetNightWork();
+  $('bonusApplied').checked = false;
+  editingWorkId = null;
+  latestCalculation = null;
+  $('saveWorkBtn').disabled = true;
+  $('calcResult').innerHTML = '勤務時間を入力して「計算」を押してください。';
+  $('calcResult').classList.add('muted');
 }
 
 function copyPreviousWork() {
@@ -777,6 +812,9 @@ function bindEvents() {
   $('clearStaffBtn').addEventListener('click', clearStaffForm);
   $('saveSettingsBtn').addEventListener('click', saveSettings);
   $('copyPreviousBtn').addEventListener('click', copyPreviousWork);
+  $('resetDayBtn').addEventListener('click', resetDayWork);
+  $('resetNightBtn').addEventListener('click', resetNightWork);
+  $('resetCalcBtn').addEventListener('click', resetCalcForm);
   $('workDate').addEventListener('change', renderTodayList);
   $('summaryMonth').addEventListener('change', renderSummary);
   $('summaryDate').addEventListener('change', renderSummary);

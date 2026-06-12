@@ -59,6 +59,7 @@
                   <input id="dayEnd" type="text" list="dayEndOptions" placeholder="空欄" inputmode="numeric" />
                 </label>
               </div>
+              <button id="resetDayBtn" type="button" class="secondary mini-reset">昼勤務をリセット</button>
             </div>
 
             <div class="section-box">
@@ -77,22 +78,24 @@
                   <select id="nightBreak"></select>
                 </label>
               </div>
+              <button id="resetNightBtn" type="button" class="secondary mini-reset">夜勤務をリセット</button>
             </div>
 
-            <label class="checkbox-row">
+            <label class="checkbox-row bonus-check-row">
               <input id="bonusApplied" type="checkbox" />
-              売上達成ボーナスを付ける
+              売上達成ボーナス
             </label>
 
             <div class="button-row">
               <button id="copyPreviousBtn" type="button" class="secondary">前回勤務コピー</button>
-              <button id="calculateBtn" type="button">計算する</button>
+              <button id="calculateBtn" type="button">計算</button>
+              <button id="resetCalcBtn" type="button" class="secondary">リセット</button>
             </div>
           </section>
 
           <section class="card">
             <h2>計算結果</h2>
-            <div id="calcResult" class="result-box muted">勤務時間を入力して「計算する」を押してください。</div>
+            <div id="calcResult" class="result-box muted">勤務時間を入力して「計算」を押してください。</div>
             <button id="saveWorkBtn" type="button" class="full" disabled>保存</button>
           </section>
         </div>
@@ -104,6 +107,19 @@
       </section>
 
       <section id="view-staff" class="view">
+        <section class="card">
+          <details class="settings-details">
+            <summary>店舗設定</summary>
+            <div class="section-box settings-box">
+              <label>
+                売上達成ボーナス金額
+                <input id="bonusAmount" type="number" inputmode="numeric" placeholder="例：1000" />
+              </label>
+              <button id="saveSettingsBtn" type="button" class="full">店舗設定を保存</button>
+            </div>
+          </details>
+        </section>
+
         <div class="grid two-col">
           <section class="card">
             <h2>バイト追加・編集</h2>
@@ -135,14 +151,6 @@
               <button id="clearStaffBtn" type="button" class="secondary">クリア</button>
             </div>
 
-            <div class="section-box">
-              <h3>店舗設定</h3>
-              <label>
-                売上達成ボーナス金額
-                <input id="bonusAmount" type="number" inputmode="numeric" placeholder="例：1000" />
-              </label>
-              <button id="saveSettingsBtn" type="button" class="full">設定を保存</button>
-            </div>
           </section>
 
           <section class="card">
